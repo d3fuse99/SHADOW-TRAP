@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SHADOW-TRAP Security Dashboard</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body class="bg-[#0a0a0c] text-gray-100 min-h-screen p-6">
+        <div class="max-w-7xl mx-auto space-y-6">
+            <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                <div>
+                    <h1 class="text-3xl font-extrabold tracking-wider text-cyan-500">SHADOW-TRAP 🪤</h1>
+                    <p class="text-gray-400 text-sm">Active Threat Intelligence Report</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-[#121216] border border-gray-800 rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4 text-cyan-400">Attack Vectors by Service</h3>
+                    <div class="h-64 flex justify-center">
+                        <canvas id="servicesChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-[#121216] border border-gray-800 rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4 text-cyan-400">Attacker Origins (Geographical)</h3>
+                    <div class="h-64 flex justify-center">
+                        <canvas id="countriesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-[#121216] border border-gray-800 rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4 text-cyan-400">Recent Incidents (Last 50)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-gray-800 text-gray-400 font-semibold">
+                                <th class="p-3">Timestamp</th>
+                                <th class="p-3">Attacker IP</th>
+                                <th class="p-3">Port</th>
+                                <th class="p-3">Service</th>
+                                <th class="p-3">Country</th>
+                                <th class="p-3">ISP</th>
+                                <th class="p-3">Captured Payload</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+        <tr class="border-b border-gray-800 hover:bg-gray-800/50">
+            <td class="p-3 text-gray-400 text-sm">2026-06-26T14:34:12.351058</td>
+            <td class="p-3 font-mono text-cyan-400">127.0.0.1</td>
+            <td class="p-3 font-mono">80</td>
+            <td class="p-3"><span class="px-2 py-1 rounded text-xs bg-red-950/50 text-red-400 border border-red-900/30">HTTP</span></td>
+            <td class="p-3 text-gray-300">Unknown</td>
+            <td class="p-3 text-gray-500 text-sm">Unknown</td>
+            <td class="p-3 font-mono text-xs text-yellow-500 max-w-xs truncate">GET /favicon.ico HTTP/1.1</td>
+        </tr>
+        
+        <tr class="border-b border-gray-800 hover:bg-gray-800/50">
+            <td class="p-3 text-gray-400 text-sm">2026-06-26T14:34:11.983039</td>
+            <td class="p-3 font-mono text-cyan-400">127.0.0.1</td>
+            <td class="p-3 font-mono">80</td>
+            <td class="p-3"><span class="px-2 py-1 rounded text-xs bg-red-950/50 text-red-400 border border-red-900/30">HTTP</span></td>
+            <td class="p-3 text-gray-300">Unknown</td>
+            <td class="p-3 text-gray-500 text-sm">Unknown</td>
+            <td class="p-3 font-mono text-xs text-yellow-500 max-w-xs truncate">HTTP POST -> username=%26%231074%3B12&password=123</td>
+        </tr>
+        
+        <tr class="border-b border-gray-800 hover:bg-gray-800/50">
+            <td class="p-3 text-gray-400 text-sm">2026-06-26T14:34:03.924274</td>
+            <td class="p-3 font-mono text-cyan-400">127.0.0.1</td>
+            <td class="p-3 font-mono">80</td>
+            <td class="p-3"><span class="px-2 py-1 rounded text-xs bg-red-950/50 text-red-400 border border-red-900/30">HTTP</span></td>
+            <td class="p-3 text-gray-300">Unknown</td>
+            <td class="p-3 text-gray-500 text-sm">Unknown</td>
+            <td class="p-3 font-mono text-xs text-yellow-500 max-w-xs truncate">GET /favicon.ico HTTP/1.1</td>
+        </tr>
+        
+        <tr class="border-b border-gray-800 hover:bg-gray-800/50">
+            <td class="p-3 text-gray-400 text-sm">2026-06-26T14:34:03.563413</td>
+            <td class="p-3 font-mono text-cyan-400">127.0.0.1</td>
+            <td class="p-3 font-mono">80</td>
+            <td class="p-3"><span class="px-2 py-1 rounded text-xs bg-red-950/50 text-red-400 border border-red-900/30">HTTP</span></td>
+            <td class="p-3 text-gray-300">Unknown</td>
+            <td class="p-3 text-gray-500 text-sm">Unknown</td>
+            <td class="p-3 font-mono text-xs text-yellow-500 max-w-xs truncate">GET / HTTP/1.1</td>
+        </tr>
+        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            new Chart(document.getElementById('servicesChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ["HTTP"],
+                    datasets: [{
+                        data: [4],
+                        backgroundColor: ['#06b6d4', '#ef4444', '#f59e0b', '#10b981'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#9ca3af' } }
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('countriesChart'), {
+                type: 'bar',
+                data: {
+                    labels: ["Unknown"],
+                    datasets: [{
+                        data: [4],
+                        backgroundColor: '#06b6d4',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } },
+                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } }
+                    }
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
